@@ -1,0 +1,59 @@
+<body>
+   <div class="flex">
+        <div class="button" onclick="janken()">グー</div>
+        <div class="button" onclick="janken()">チョキ</div>
+        <div class="button" onclick="janken()">パー</div>
+   </div>
+
+   <div id = 'result'></div>
+<body>
+<style>
+    .flex {
+        width: 300px;
+        display: flex;
+        justify-content: space-between;
+    }
+   .button {
+      width: 60px;
+      padding: 4px;
+      border-radius: 4px;
+      border: 2px solid black;
+      text-align: center;
+    } 
+    #result {
+        margin-top: 16px;
+    }
+</style>
+<script>
+    // 乱数生成　例：３を渡すと０、１、２が返ってくる
+    const getRandomNumber = (max) => {
+          return Math.floor(Math.random() * max);
+    }
+
+    // 停止関数
+    const sleep = (second) => {
+      return new Promise(resolve => setTimeout(resolve, second));
+    }
+    
+    // じゃんけんの結果を返す
+    const getJankenResult = () => {
+        const result = ['勝ち', '負け', 'あいこ']
+        return result[getRandomNumber(result.length)]     
+    }
+
+    // 結果を表示する
+    const displayResult = (result) => {
+        document.getElementById('result').textContent = result
+    } 
+
+    // アクセス時の初回動作
+    const janken = async () => {
+        displayResult('じゃんけん')
+        // 1秒まつ
+        await sleep(1000)
+        displayResult('ポン！')
+        // 1秒まつ
+        await sleep(1000)
+        displayResult(getJankenResult())
+    }
+</script>

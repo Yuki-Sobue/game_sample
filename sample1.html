@@ -1,0 +1,27 @@
+<body>
+   <div id = 'result'></div>
+<body>
+<script>
+    // 乱数生成　例：３を渡すと０、１、２が返ってくる
+    const getRandomNumber = (max) => {
+          return Math.floor(Math.random() * max);
+    }
+    
+    // じゃんけんの結果を返す
+    const getJankenResult = () => {
+        const result = ['勝ち', '負け', 'あいこ']
+        return result[getRandomNumber(result.length)]     
+    }
+
+    // 結果を表示する
+    const displayResult = (result) => {
+        document.getElementById('result').textContent = result
+    } 
+
+    // アクセス時の初回動作
+    const init = () => {
+        displayResult(getJankenResult())
+    }
+
+    init()
+</script>
