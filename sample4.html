@@ -1,0 +1,98 @@
+<body>
+   <div id = 'result'></div>
+   <div class="enemy">
+     <img id="enemy-img" src="./images/enemy.jpeg"/>
+   </div>
+   <div class="flex">
+    <div class="button bg-green" onclick="janken()">
+       <img src="./images/gu.png"/>
+    </div>
+    <div class="button bg-red" onclick="janken()">
+        <img src="./images/choki.png"/>
+    </div>
+    <div class="button bg-blue" onclick="janken()">
+        <img src="./images/pa.png"/>
+    </div>
+</div>
+<body>
+<style>
+    .flex {
+        width: 300px;
+        display: flex;
+        justify-content: space-between;
+    }
+   .button {
+      width: 60px;
+      padding: 4px;
+      border-radius: 4px;
+      border: 2px solid black;
+      text-align: center;
+    } 
+    .button > img {
+        max-width: 100%;
+        height: auto;
+    }
+    .bg-blue {
+        background-color: rgb(115, 255, 250);
+    }
+    .bg-red {
+        background-color: rgb(255, 145, 115);
+    }
+    .bg-green {
+        background-color: rgb(143, 255, 154);
+    }
+    .enemy {
+        width: 400px;
+        height: 400px;
+    }
+    .enemy > img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    #result {
+        margin-top: 16px;
+    }
+</style>
+<script>
+    let isWaitingResult = false
+
+    // 乱数生成　例：３を渡すと０、１、２が返ってくる
+    const getRandomNumber = (max) => {
+          return Math.floor(Math.random() * max);
+    }
+
+    // 停止関数
+    const sleep = (second) => {
+      return new Promise(resolve => setTimeout(resolve, second));
+    }
+    
+    // コンピュータのじゃんけんの手の画像をランダムで返す
+    const getJankenEnemyImageSrc = () => {
+        const result = ["./images/gu-enemy.png", './images/choki-enemy.png', './images/pa-enemy.png']
+        return result[getRandomNumber(result.length)]     
+    }
+
+
+
+    // 結果を表示する
+    const displayResult = (result) => {
+        document.getElementById('result').textContent = result
+    } 
+
+    // じゃんけん
+    const janken = async () => {
+        // 連打防止
+        if (isWaitingResult) {
+            return
+        }
+        isWaitingResult = true
+        document.getElementById("enemy-img").src = "./images/enemy.jpeg"
+        displayResult('じゃんけん')
+        // 1秒まつ
+        await sleep(1000)
+        displayResult('ポン！')
+        document.getElementById("enemy-img").src = getJankenEnemyImageSrc()
+        isWaitingResult = false
+    }
+</script>
