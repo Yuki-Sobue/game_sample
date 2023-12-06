@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+* {
+    font-family: sans-serif;
+    color: gray;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    border: 1px solid gray;
+    border-radius: 4px;
+  }
+
+  h1 {
+    background-color: royalblue;
+    padding: 4px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  h2 {
+    background-color: royalblue;
+    padding: 4px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+
+  p {
+    padding: 8px;
+    line-height: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  ul > li {
+    padding-bottom: 4px;
+  }
+
+  a {
+    color: royalblue;
+    text-decoration: none;
+  }

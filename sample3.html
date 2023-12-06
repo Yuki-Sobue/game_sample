@@ -2,6 +2,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
+    <a href="./index.html">戻る</a>
    <div id = 'result'></div>
    <div class="enemy">
      <img id="enemy-img" src="./images/enemy.jpeg"/>
@@ -63,9 +64,9 @@
           return Math.floor(Math.random() * max);
     }
 
-    // 停止関数
-    const sleep = (second) => {
-      return new Promise(resolve => setTimeout(resolve, second));
+    // 停止関数 引数の単位はm秒
+    const sleep = (msecond) => {
+      return new Promise(resolve => setTimeout(resolve, msecond));
     }
     
     // コンピュータのじゃんけんの手の画像をランダムで返す
@@ -73,8 +74,6 @@
         const result = ["./images/gu-enemy.png", './images/choki-enemy.png', './images/pa-enemy.png']
         return result[getRandomNumber(result.length)]     
     }
-
-
 
     // 結果を表示する
     const displayResult = (result) => {
