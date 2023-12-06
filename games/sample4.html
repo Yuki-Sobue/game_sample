@@ -2,20 +2,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 <body>
-    <a href="./index.html">戻る</a>
+   <a href="../index.html">戻る</a>
    <div id = 'result'></div>
    <div class="enemy">
-     <img id="enemy-img" src="./images/enemy.jpeg"/>
+     <img id="enemy-img" src="../images/enemy.jpeg"/>
    </div>
    <div class="flex">
     <div class="button bg-green" onclick="janken()">
-       <img src="./images/gu.png"/>
+       <img src="../images/gu.png"/>
     </div>
     <div class="button bg-red" onclick="janken()">
-        <img src="./images/choki.png"/>
+        <img src="../images/choki.png"/>
     </div>
     <div class="button bg-blue" onclick="janken()">
-        <img src="./images/pa.png"/>
+        <img src="../images/pa.png"/>
     </div>
 </div>
 <body>
@@ -59,19 +59,21 @@
     }
 </style>
 <script>
+    let isWaitingResult = false
+
     // 乱数生成　例：３を渡すと０、１、２が返ってくる
     const getRandomNumber = (max) => {
           return Math.floor(Math.random() * max);
     }
 
-    // 停止関数 引数の単位はm秒
-    const sleep = (msecond) => {
+     // 停止関数 引数の単位はm秒
+     const sleep = (msecond) => {
       return new Promise(resolve => setTimeout(resolve, msecond));
     }
     
     // コンピュータのじゃんけんの手の画像をランダムで返す
     const getJankenEnemyImageSrc = () => {
-        const result = ["./images/gu-enemy.png", './images/choki-enemy.png', './images/pa-enemy.png']
+        const result = ["../images/gu-enemy.png", '../images/choki-enemy.png', '../images/pa-enemy.png']
         return result[getRandomNumber(result.length)]     
     }
 
@@ -82,11 +84,17 @@
 
     // じゃんけん
     const janken = async () => {
-        document.getElementById("enemy-img").src = "./images/enemy.jpeg"
+        // 連打防止
+        if (isWaitingResult) {
+            return
+        }
+        isWaitingResult = true
+        document.getElementById("enemy-img").src = "../images/enemy.jpeg"
         displayResult('じゃんけん')
         // 1秒まつ
         await sleep(1000)
         displayResult('ポン！')
         document.getElementById("enemy-img").src = getJankenEnemyImageSrc()
+        isWaitingResult = false
     }
 </script>
