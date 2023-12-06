@@ -1,0 +1,108 @@
+<style>
+.flex {
+  display: flex;
+}
+
+.tile {
+  height: 60px;
+  width: 60px;
+  line-height: 60px;
+  border: 1px solid black;
+  border-radius: 4px;
+  margin: 0 2px 2px 0;
+  text-align: center;
+}
+</style>
+<body>
+  <section>
+    <div class="flex">
+       <div id="00" class="tile" onclick="clickTile(new Axis(0, 0))"></div>
+       <div id="01" class="tile" onclick="clickTile(new Axis(0, 1))">></div>
+       <div id="02" class="tile" onclick="clickTile(new Axis(0, 2))">></div>
+   </div>
+    <div class="flex">
+       <div id="10" class="tile" onclick="clickTile(new Axis(1, 0))">></div>
+       <div id="11" class="tile" onclick="clickTile(new Axis(1, 1))">></div>
+       <div id="12" class="tile" onclick="clickTile(new Axis(1, 2))">></div>
+   </div>
+    <div class="flex">
+       <div id="20" class="tile" onclick="clickTile(new Axis(2, 0))">></div>
+       <div id="21" class="tile" onclick="clickTile(new Axis(2, 1))">></div>
+       <div id="22" class="tile" onclick="clickTile(new Axis(2, 2))">></div>
+   </div>
+  </section>
+</body>
+<script>
+
+// 座標オブジェクト
+class Axis {
+  constructor(x, y) {
+    this.x = x 
+    this.y = y
+  }
+
+  getAxisId() {
+    return `${this.x}${this.y}`
+  }
+}
+
+console.log(new Axis(1, 2))
+
+// 空のタイルの座標を取得
+const getBlankTileAxis = () => {
+  for (let x = 0; x <= tiles.length; x++) {
+    if (tiles[x].includes('')) {
+      return new Axis(x, tiles[x].indexOf(''))
+    }
+  }
+}
+
+// 動かせるタイルの座標を取得し, Axis[] で返す
+const getMovableTileAxisArr = () => {
+  const blankAxis = getBlankTileAxis()
+  const upAxis = new Axis(blankAxis.x -1, blankAxis.y)
+  const leftAxis = new Axis(blankAxis.x, blankAxis.y - 1)
+  const rightAxis = new Axis(blankAxis.x, blankAxis.y + 1)
+  const downAxis = new Axis(blankAxis.x +1, blankAxis.y)
+  return [upAxis, leftAxis, rightAxis, downAxis]
+}
+
+const tiles = [
+  ['A', 'B', 'C'],
+  ['D', 'E', 'F'],
+  ['G', 'H', '']
+]
+
+// 全てのタイルを描画し直す
+const renderAll = () => {
+  document.getElementById("00").textContent = tiles[0][0]
+  document.getElementById("01").textContent = tiles[0][1]
+  document.getElementById("02").textContent = tiles[0][2]
+  document.getElementById("10").textContent = tiles[1][0]
+  document.getElementById("11").textContent = tiles[1][1]
+  document.getElementById("12").textContent = tiles[1][2]
+  document.getElementById("20").textContent = tiles[2][0]
+  document.getElementById("21").textContent = tiles[2][1]
+  document.getElementById("22").textContent = tiles[2][2]
+}
+
+// タイル押下処理
+const clickTile = (axisObj) => {
+  const tileId = axisObj.getAxisId()
+  const canMove = getMovableTileAxisArr().map(axis => axis.getAxisId()).includes(tileId)
+  if (canMove) {
+    const blankAxis = getBlankTileAxis()
+  
+    // タイルの中身入れ替え、描画処理
+    tiles[blankAxis.x][blankAxis.y] = tiles[axisObj.x][axisObj.y]
+    document.getElementById(blankAxis.getAxisId()).textContent = tiles[axisObj.x][axisObj.y]
+
+    tiles[axisObj.x][axisObj.y] = ''
+    document.getElementById(axisObj.getAxisId()).textContent = ''
+  }
+}
+
+// 初期処理
+renderAll()
+
+</script>
