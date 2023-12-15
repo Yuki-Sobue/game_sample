@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="../../../stylesheets/style.css"/>
+<head>
+  <title>未経験エンジニア向け交流会&勉強会「もの作りって楽しいよね！」コンテンツ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<h1 class="header">未経験エンジニア向け交流会&勉強会<br/>「もの作りって楽しいよね！」</h1>
+<nav class="bread-crumb">
+ <a href="../../../index.html">トップページ</a><span></span>シューティングゲーム（動作サンプル）
+</nav>
+<div class="divider"></div> 
+<div>
+  W: 前移動 / S:後ろ移動 / A: 左移動 / D:右移動 / スペース: 弾丸発射
+</div>
+<div id = 'life'></div>
+<canvas id='canvas'></canvas>
+<script type="text/javascript" src="./class/Player.js"></script>
+<script type="text/javascript" src="./class/Enemy.js"></script>
+
+
+<script>
+  const CANVAS_HEIGHT = 400
+  
+  // Canvasの設定
+  const canvas = document.getElementById('canvas')
+  const width= canvas.clientWidth;
+  const height= canvas.clientHeight;
+  canvas.width = 500;
+  canvas.height = CANVAS_HEIGHT
+  canvas.style.backgroundColor = "rgb(0, 0, 0)"
+  const context = canvas.getContext('2d')
+
+  function resizeImg(imgData) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 15;
+    canvas.height = 15;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(imgData, 0, 0, 15, 15);
+    return canvas.toDataURL('image/png')
+  }
+
+
+  // 画像の読み出し
+  const planeImage = new Image();
+  planeImage.src = '../images/plane.png';
+
+  const bulletImage = new Image();
+  bulletImage.src = '../images/bullet.png';
+
+  const enemyImage = new Image();
+  enemyImage.src = '../images/enemy_e1.png';
+
+
+  const plane = new Player(planeImage)
+
+
+
+  document.onkeypress = (e) => {
+    // Wキー
+    if (e.keyCode === 119) {
+      if (plane.y <= 12) { return }
+      plane.moveUp()
+
+    }
+
+    // Sキー
+    if (e.keyCode === 115) {
+      if (plane.y >= 648) { return }
+      plane.moveDown()
+    }
+
+    // Dキー
+    if (e.keyCode === 100) {
+      if (plane.x >= 466) { return }
+      plane.moveRight()
+     }
+
+    // Aキー
+    if (e.keyCode === 97) {
+      if (plane.x <= -2) { return }
+      plane.moveLeft()
+    }
+
+    if (e.keyCode === 99) {
+      plane.changeWeapon()
+    }
+ 
+    context.drawImage(plane.image, plane.x, plane.y)
+  }
+
+  document.onkeyup = (e) => {
+    if (e.keyCode === 32) {
+      plane.shot()
+    }
+  }
+
+  const max = 300;
+
+  let enemyArr = [
+    new Enemy(enemyImage, Math.random() * max, 300, 5),
+    new Enemy(enemyImage, Math.random() * max, 400, 5),
+    new Enemy(enemyImage, Math.random() * max, 500, 5),
+    new Enemy(enemyImage, Math.random() * max, 600, 5),
+    new Enemy(enemyImage, Math.random() * max, 200, 5)
+  ]
+
+  const addEnemies = () => {
+    enemyArr.push(new Enemy(enemyImage, Math.random() * max, Math.random() * max, Math.random() * 5))
+    enemyArr.push(new Enemy(enemyImage, Math.random() * max, Math.random() * max, Math.random() * 5))
+    enemyArr.push(new Enemy(enemyImage, Math.random() * max, Math.random() * max, Math.random() * 5))
+    enemyArr.push(new Enemy(enemyImage, Math.random() * max, Math.random() * max, Math.random() * 5))
+    enemyArr.push(new Enemy(enemyImage, Math.random() * max, Math.random() * max, Math.random() * 5))
+    enemyArr.push(new Enemy(enemyImage, Math.random() * max, Math.random() * max, Math.random() * 5))
+  }
+
+  const addEnemiesTimer = setInterval(addEnemies, 3000)
+
+  const main = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height)
+
+    plane.bulletsCleanUp()
+    plane.render(context)
+
+    plane.bullets.forEach(b => {
+      b.move()
+      b.render(context)
+    })
+
+    enemyArr.forEach(e => {
+      e.render(context)
+      e.move()
+
+      if (plane.x - 12 <= e.x && e.x <= plane.x + 12 && plane.y - 12 <= e.y && e.y <= plane.y + 12 ) {
+        if (plane.noDamage) {
+          return 
+        }
+        plane.noDamage = true
+        plane.life -= 5
+        setTimeout(() => { plane.noDamage =false }, 2000)
+      }
+    })
+
+    document.getElementById('life').innerText = 'HP:' +  plane.life
+   
+    if (plane.life <= 0) {
+      window.location.reload()
+    }
+  }
+
+  const timer = setInterval(main, 50)
+</script>
